@@ -9,53 +9,67 @@
 
 #include <ESP8266WiFi.h>
 
-const char* ssid = "Dima";
-const char* password = "15032009";
+#include <SoftwareSerial.h> 
+
+const char* ssid = "sss";
+const char* password = "10071975";
+
+SoftwareSerial* serial = new SoftwareSerial(D9, D10);
+IPAddress ip(192, 168, 1, 11);  
+IPAddress gateway(192, 168, 1, 1);  
+IPAddress subnet(255, 255, 0, 0); 
 
 // Create an instance of the server
 // specify the port to listen on as an argument
 WiFiServer wifiServer(80);
 
 void setup() {
+//  Serial.begin(9600); - not working
+	serial->begin(9600);
 
-  Serial.begin(115200);
-
-  delay(1000);
-
-  WiFi.begin(ssid, password);
-
+//
+	delay(1000);
+//  WiFi.begin(ssid, password);
+//
+  WiFi.config(ip,gateway , subnet);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.println("Connecting to WiFi..");
+//    Serial.println("Connecting to WiFi..");
   }
 
-  Serial.println("Connected to the WiFi network");
-  Serial.println(WiFi.localIP());
-
+//  Serial.println("Connected to the WiFi network");
+//  Serial.println(WiFi.localIP());
+//
   wifiServer.begin();
 }
 
 void loop() {
-
-  WiFiClient client = wifiServer.available();
-  String str = "";
-  if (client) {
-
-    while (client.connected()) {
-
-      while (client.available() > 0) {
-        char c = client.read();
-        str += c;
-        client.write(c);
+//    serial->print('\007');
+    delay(100);
+    WiFiClient client = wifiServer.available();
+    String cmd = "";
+    if (client) {
+  
+      while (client.connected()) {
+  
+        while (client.available() > 0) {
+          char c = client.read();
+  		    cmd += c;
+          client.write(c);
+        }
+  
+        delay(10);
       }
-
-      delay(10);
-    }
+  	handleComand(cmd);
+  	serial->print(cmd);
 
     client.stop();
-    Serial.println(str);
-    Serial.println("Client disconnected");
+//    Serial.println(cmd);
 
   }
+}
+
+void handleComand(String cmd) {
+
 }
 

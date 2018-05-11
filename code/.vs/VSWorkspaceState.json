@@ -5,8 +5,9 @@
     "\\sketches",
     "\\sketches\\car_mooving",
     "\\sketches\\test_",
+    "\\visual",
     "\\wifi"
   ],
-  "SelectedNode": "\\wifi\\wifi.ino",
+  "SelectedNode": "\\visual\\wifi_visual.ino",
   "PreviewInSolutionExplorer": false
 }

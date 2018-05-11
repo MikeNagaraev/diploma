@@ -14,8 +14,9 @@ void setup() {
 }
 
 void loop() {
+//  Serial.println("kek");
   if (serial_ptr->available()) {
-    readString = serial_ptr->read();
+    readString = serial_ptr->readString(); 
     Serial.print(readString);
     Serial.println();
   }
