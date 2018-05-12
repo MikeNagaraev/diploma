@@ -2,12 +2,12 @@ import socket
  
 sock = socket.socket()
  
-host = "192.168.1.11" #ESP32 IP in local network
+host = "192.168.43.18" #ESP32 IP in local network
 port = 80             #ESP32 Server Port    
  
 sock.connect((host, port))
  
-message = "Hello World"
+message = "exit"
 sock.send(str(message).encode('utf-8'))
  
 data = ""
