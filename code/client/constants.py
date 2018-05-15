@@ -1,0 +1,3 @@
+HOST = "192.168.0.109"
+PORT = 80
+STOP_SYMBOL = '`'

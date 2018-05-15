@@ -13,6 +13,9 @@ const String SET_PASSWORD = "SET_PASSWORD";
 const String GET_PASSWORD = "GET_PASSWORD";
 const String CONNECT_TO_WIFI = "CONNECT_TO_WIFI";
 const String WIFI_SESSION = "WIFI_SESSION";
+const String HELP = "HELP";
+const int COMMANDS_LENGTH = 8;
+String HELP_COMMANDS[]={ GET_IP_ADDRESS, SET_SSID, GET_SSID, GET_LOCAL_SSID, SET_PASSWORD, GET_PASSWORD, CONNECT_TO_WIFI, WIFI_SESSION };
 const int STATE_OK = 4;
 
 
@@ -37,7 +40,7 @@ void loop() {
 
 void handleCommand(String cmd) {
   if (cmd == "test") {
-    controller->print("test");
+    sendToController("test");
   }
   else if (cmd == SET_IP_ADDRESS) {
     approve(cmd);
@@ -83,7 +86,11 @@ void handleCommand(String cmd) {
   else if (cmd == WIFI_SESSION) {
     approve(cmd);
     notifyController(STATE_OK, "WIFI_SESSION", getIpAddress());
+    delay(200);
     wifiSession();
+  }
+  else if (cmd == HELP) {
+    help();
   }
   else {
     controller->print("Unknown command: " + cmd);
@@ -98,18 +105,24 @@ void wifiSession() {
       while (client.connected()) {
         while (client.available() > 0) {
           char c = client.read();
-          wifiCmd += c;        
-          client.write(c);
-        }
-        if (wifiCmd == "exit") {
-          notifyController(STATE_OK, "WIFI_SESSION", "stoped");
-          client.stop();
-          return;
-        }
+          if (c == '`') {        
+            sendToController(wifiCmd);
+            String data = readFromController();
+            client.write(data.c_str());
+            
+            if (wifiCmd == "stop") {
+              client.stop();
+              return;
+            }                         
+            wifiCmd = "";
+          }
+          else {           
+            wifiCmd += c; 
+          } 
+        }                     
   
         delay(10);            
-      }      
-      sendToController(wifiCmd);
+      }
     }
     client.stop();
   }
@@ -130,7 +143,7 @@ void approve(String cmd) {
 }
 
 void sendToController(String data) {
-  controller->print(data);
+  controller->print(data.length() > 0 ? data : "NULL");
 }
 
 String readFromController() {
@@ -181,5 +194,11 @@ int connectToHotspot() {
   }
   sendToController("Connected to: " + ssid);
   return STATE_OK;
+}
+
+void help() {
+  for (int i = 0; i < COMMANDS_LENGTH; i++) {
+    sendToController("\n" + HELP_COMMANDS[i]);
+  }
 }
 
