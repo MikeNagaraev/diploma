@@ -17,14 +17,12 @@ const String HELP = "HELP";
 const int COMMANDS_LENGTH = 8;
 String HELP_COMMANDS[]={ GET_IP_ADDRESS, SET_SSID, GET_SSID, GET_LOCAL_SSID, SET_PASSWORD, GET_PASSWORD, CONNECT_TO_WIFI, WIFI_SESSION };
 const int STATE_OK = 4;
-
-
-SoftwareSerial* controller = new SoftwareSerial(D9, D10);
-WiFiServer wifiServer(80);
 IPAddress ip(192, 168, 1, 229);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 0, 0);
 
+SoftwareSerial* controller = new SoftwareSerial(D9, D10);
+WiFiServer wifiServer(80);
 void setup() {
   controller->begin(9600);
   controller->listen();
