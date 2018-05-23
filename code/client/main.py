@@ -14,22 +14,13 @@ def get_data():
 def validate_command(cmd):
     return True
 
-def is_menu_cmd(cmd):
+def execute(cmd):
     if cmd == "exit":
         wifi_module.close()
         os._exit(1)
-    return False
-
-def communication:
-    send_data(cmd)
-    print(get_data())
-
-def execute(cmd):
-    if is_menu_cmd(cmd):
-        menu.run(cmd)
     else:
-        communication.send_data(cmd)
-        communication.print_data()
+        send_data(cmd)
+        print(get_data())
 
 
 
